@@ -14,6 +14,7 @@ import globals from "globals";
 import jsPlugin from "@eslint/js";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
+import jestPlugin from "eslint-plugin-jest";
 
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
@@ -37,11 +38,27 @@ export default [
     },
     plugins: {
       "@typescript-eslint": tsPlugin,
+      jest: jestPlugin,
     },
     rules: {
       ...jsPlugin.configs.recommended.rules,
       ...tsPlugin.configs.recommended.rules,
       // Add or override any specific rules here
+    },
+  },
+  {
+    // Jest-specific configuration for test files
+    files: ["**/__tests__/*.{js,ts}", "**/*.{spec,test}.{js,ts}"],
+    languageOptions: {
+      globals: {
+        ...globals.jest, // Enables Jest globals like `describe`, `test`, etc.
+      },
+    },
+    plugins: {
+      jest: jestPlugin,
+    },
+    rules: {
+      ...jestPlugin.configs.recommended.rules,
     },
   },
 ];
